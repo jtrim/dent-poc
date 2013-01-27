@@ -6,7 +6,12 @@ gem 'rails', '3.2.11'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'sqlite3'
+gem 'draper'
+gem 'slim'
 
+group :development do
+  gem 'pry'
+end
 
 # Gems used only for assets and not required
 # in production environments by default.
