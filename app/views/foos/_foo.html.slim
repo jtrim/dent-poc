@@ -1,0 +1,12 @@
+tr
+  td
+    = foo.if 'name' do
+      = foo.name
+    = foo.unless 'name' do
+      em (Unnamed)
+  td
+    a href=foo.path Show
+  td
+    a href=foo.edit_path Edit
+  td
+    a href=foo.path data-method="delete" data-confirm="Are you sure?"

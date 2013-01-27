@@ -1,0 +1,13 @@
+<tr>
+  <td>
+    <%= foo.if 'name' do %>
+      <%= foo.name %>
+    <% end %>
+    <%= foo.unless 'name' do %>
+      <em>(Unnamed)</em>
+    <% end %>
+  </td>
+  <td><a href="<%= foo.path %>">Show</a></td>
+  <td><a href="<%= foo.edit_path %>">Edit</a></td>
+  <td><a href="<%= foo.path %>" data-method="delete" data-confirm="Are you sure?">Destroy</a></td>
+</tr>
