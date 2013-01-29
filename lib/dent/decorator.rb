@@ -24,7 +24,7 @@ module Dent
 
           define_method method_name do
             mustache_for method_name do
-              send(:"old_#{attr}")
+              send(:"old_#{method_name}")
             end
           end
         end
@@ -102,7 +102,7 @@ module Dent
       end
     end
 
-    def if(param_name, &block)
+    def render_section_if(param_name, block)
       block_output_buffer = eval('@output_buffer', block.binding)
       length_before_block = block_output_buffer.to_s.length
 
@@ -111,7 +111,7 @@ module Dent
         rendered_segment = block_output_buffer.to_s[length_before_block..-1]
         ("{{##{param_name}}}" + rendered_segment + "{{/#{param_name}}}").html_safe
       else
-        if model.send(param_name).present?
+        if yield
           block.call
           block_output_buffer.to_s[length_before_block..-1]
         end
@@ -120,23 +120,19 @@ module Dent
       result
     end
 
-    def unless(param_name, &block)
-      block_output_buffer = eval('@output_buffer', block.binding)
-      length_before_block = block_output_buffer.to_s.length
-
-      result = if js?
-        block.call
-        rendered_segment = block_output_buffer.to_s[length_before_block..-1]
-        ("{{^#{param_name}}}" + rendered_segment + "{{/#{param_name}}}").html_safe
-      else
-        unless model.send(param_name).present?
-          block.call
-          block_output_buffer.to_s[length_before_block..-1].html_safe
-        end
+    def section(param_name, &block)
+      render_section_if do
+        model.send(param_name, rendered_segment).present?
       end
-      block_output_buffer.replace(block_output_buffer.to_s[0...length_before_block])
-      result
     end
+    alias :if :section
+
+    def inverted_section(param_name, &block)
+      render_section_if do
+        !(model.send(param_name, rendered_segment).present?)
+      end
+    end
+    alias :unless :inverted_section
 
   end
 
