@@ -7,3 +7,5 @@ end
 Dent::Decorator.descendants.each do |decorator_class|
   decorator_class.finalize
 end
+
+Dent.bootstrap

@@ -1,8 +1,9 @@
+/ dentable
 tr
   td
-    = foo.if 'name' do
+    = foo.section 'name' do
       = foo.name
-    = foo.unless 'name' do
+    = foo.inverted_section 'name' do
       em (Unnamed)
   td
     a href=foo.path Show

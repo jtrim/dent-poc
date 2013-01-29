@@ -1,10 +1,29 @@
-<script type="text/plain">
-  <%= render 'foos/foo', foo: FooDecorator.for_js_template %>
+<script>
+  $(function() {
+    $("#new-foo").on('click', function(event) {
+      event.preventDefault();
+      var $form = $("<form><label for='foo-name'>Name</label><input id='foo-name' /><input type='submit' /></form>");
+      $form.on('submit', function(fevent) {
+        fevent.preventDefault();
+        model = new App.Models.Foo()
+        model.save({name: $form.find('#foo-name').val() }).fail(function() {
+          $(document.body).append("<br /><em>Sorry, server error. Couldn't save the Foo.</em>");
+          $form.remove();
+        }).success(function() {
+          view = new Backbone.View;
+          presenter = new App.Presenters.FooPresenter(model.attributes);
+          $('#foos').append(view.render('foo-template', presenter));
+        });
+      });
+      $(document.body).append($form);
+      $form.find('#foo-name').trigger('focus')
+    });
+  });
 </script>
 
 <h1>Listing foos</h1>
 
-<table>
+<table id='foos'>
   <tr>
     <th>Name</th>
     <th></th>
@@ -17,4 +36,4 @@
 
 <br />
 
-<%= link_to 'New Foo', new_foo_path %>
+<%= link_to 'New Foo', new_foo_path, id: 'new-foo' %>
