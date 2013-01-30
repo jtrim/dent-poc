@@ -15,7 +15,8 @@ module Dent
   end
 
   def self.bootstrap
-    Dir['app/views/**/_*'].each do |filename|
+    self.dentable_templates = []
+    Dir['app/views/**/*'].each do |filename|
       if comment_marker = comment_marker_for(filename)
         file_comments = File.new(filename).lines.take_while { |l| l.strip =~ Regexp.new("^#{comment_marker}") }
         Dent.dentable_templates << filename if file_comments.grep(/dentify|dentable/).present?
@@ -24,8 +25,10 @@ module Dent
   end
 
   def self.render
+    bootstrap
     view_lookup_context = ActionView::LookupContext.new(Dir['app/views'])
     views = ActionView::Base.new(view_lookup_context)
+
     script_template = "<script type='text/mustache' id='%s'>%s</script>"
     dentable_templates.map do |filename|
       match = filename.match(/_([^\.]+)/)

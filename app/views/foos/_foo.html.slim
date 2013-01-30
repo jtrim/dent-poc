@@ -5,9 +5,6 @@ tr
       = foo.name
     = foo.inverted_section 'name' do
       em (Unnamed)
-  td
-    a href=foo.path Show
-  td
-    a href=foo.edit_path Edit
-  td
-    a href=foo.path data-method="delete" data-confirm="Are you sure?"
+  td= link_to 'Show', foo.path
+  td= link_to 'Edit', foo.edit_path
+  td= link_to 'Delete', foo.path, method: :delete, confirm: 'Are you sure?'
