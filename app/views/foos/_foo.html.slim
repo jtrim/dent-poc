@@ -1,0 +1,10 @@
+/ dentable
+tr
+  td
+    = foo.section 'name' do
+      = foo.name
+    = foo.inverted_section 'name' do
+      em (Unnamed)
+  td= link_to 'Show', foo.path
+  td= link_to 'Edit', foo.edit_path
+  td= link_to 'Delete', foo.path, method: :delete, confirm: 'Are you sure?'
